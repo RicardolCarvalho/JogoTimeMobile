@@ -24,7 +24,7 @@ public class StartButtonHint : MonoBehaviour
     [SerializeField] private string keyboardText = "Pressione E para iniciar";
     [SerializeField] private string xboxText     = "Pressione A para iniciar";
     [SerializeField] private string psText       = "Pressione X para iniciar";
-    [SerializeField] private string genericPadText = "Pressione A para iniciar";
+    [SerializeField] private string genericPadText = "Pressione E para iniciar";
 
     [Header("Blink Animation")]
     [SerializeField] private float blinkSpeed = 1.5f;   // quanto maior, mais rápido pisca
@@ -79,6 +79,11 @@ public class StartButtonHint : MonoBehaviour
             menu.IniciarJogo();
         else
             Debug.LogWarning("[StartButtonHint] MenuActions não atribuído.");
+    }
+
+    public void OnMobileStartButton()
+    {
+        TryStartGame();
     }
 
     private InputMode GuessInitialMode()

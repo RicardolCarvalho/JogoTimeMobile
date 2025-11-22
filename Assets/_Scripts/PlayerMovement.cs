@@ -13,8 +13,18 @@ public class PlayerMovement : MonoBehaviour
     Vector2 input;
     Vector2 lastMoveDir = Vector2.down;
 
-    // 0 = nenhum, 1 = horizontal, 2 = vertical
-    int lockedAxis = 0;
+    int lockedAxis = 0; // 0 = nenhum, 1 = horizontal, 2 = vertical
+
+    // ===============================
+    // ADIÇÃO PARA MOBILE
+    // ===============================
+    [Header("Botões Mobile (opcional)")]
+    public HoldButton btnUp;     // W
+    public HoldButton btnDown;   // S
+    public HoldButton btnLeft;   // A
+    public HoldButton btnRight;  // D
+    // ===============================
+
 
     void Awake()
     {
@@ -25,57 +35,78 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // 1) Ler teclado (Raw para evitar aceleração)
-        float ix = Input.GetAxisRaw("Horizontal"); // -1,0,1
-        float iy = Input.GetAxisRaw("Vertical");   // -1,0,1
+        // ============================================
+        // 1) Ler teclado OU botões mobile
+        // ============================================
 
-        // 2) Descobrir qual eixo deve ficar "travado" (última tecla pressionada)
-        //    - Se apertar A/D, travamos horizontal
-        //    - Se apertar W/S, travamos vertical
+        // TECLADO
+        float ix = Input.GetAxisRaw("Horizontal"); 
+        float iy = Input.GetAxisRaw("Vertical");
+
+        // MOBILE (usar apenas se existirem)
+        if (btnLeft && btnLeft.isPressed)   ix = -1;
+        if (btnRight && btnRight.isPressed) ix =  1;
+        if (btnUp && btnUp.isPressed)       iy =  1;
+        if (btnDown && btnDown.isPressed)   iy = -1;
+        // ============================================
+
+
+        // ============================================
+        // 2) SEU CÓDIGO ORIGINAL — TRAVAMENTO DE EIXO
+        // ============================================
+
+        // detectar qual eixo deve travar
         if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D) ||
-            Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+            Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow) ||
+            (btnLeft && btnLeft.isPressed) || (btnRight && btnRight.isPressed))
         {
             lockedAxis = 1; // horizontal
         }
+
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) ||
-            Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+            Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow) ||
+            (btnUp && btnUp.isPressed) || (btnDown && btnDown.isPressed))
         {
             lockedAxis = 2; // vertical
         }
 
-        // 3) Aplicar o travamento de eixo
-        if (lockedAxis == 1)      // horizontal
+        // aplicar travamento
+        if (lockedAxis == 1)
         {
             input.x = ix;
             input.y = 0f;
-            if (Mathf.Approximately(ix, 0f)) lockedAxis = 0; // soltou -> libera
+            if (Mathf.Approximately(ix, 0f))
+                lockedAxis = 0;
         }
-        else if (lockedAxis == 2) // vertical
+        else if (lockedAxis == 2)
         {
             input.x = 0f;
             input.y = iy;
-            if (Mathf.Approximately(iy, 0f)) lockedAxis = 0; // soltou -> libera
+            if (Mathf.Approximately(iy, 0f))
+                lockedAxis = 0;
         }
         else
         {
-            // Nenhum eixo travado ainda: se só uma direção está ativa, use ela;
-            // se ambas estão ativas, priorize a mais forte (ou nada)
             if (Mathf.Abs(ix) > 0.01f && Mathf.Abs(iy) < 0.01f)
             {
-                lockedAxis = 1; input.x = ix; input.y = 0f;
+                lockedAxis = 1;
+                input.x = ix; input.y = 0f;
             }
             else if (Mathf.Abs(iy) > 0.01f && Mathf.Abs(ix) < 0.01f)
             {
-                lockedAxis = 2; input.x = 0f; input.y = iy;
+                lockedAxis = 2;
+                input.x = 0f; input.y = iy;
             }
             else
             {
-                // ambas pressionadas ao mesmo tempo: opcionalmente priorize a última tecla
                 input = Vector2.zero;
             }
         }
 
-        // 4) Animator params
+        // ============================================
+
+
+        // seu animator original
         animator.SetFloat("MoveX", input.x);
         animator.SetFloat("MoveY", input.y);
         animator.SetFloat("Speed", input.sqrMagnitude);
@@ -86,9 +117,9 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("LastX", lastMoveDir.x);
         animator.SetFloat("LastY", lastMoveDir.y);
 
-        // 5) Flip apenas para movimento horizontal
+        // flip horizontal
         if (Mathf.Abs(input.x) > Mathf.Abs(input.y) && Mathf.Abs(input.x) > 0.01f)
-            sr.flipX = input.x > 0f;      // seu sprite base olha para ESQUERDA
+            sr.flipX = input.x > 0f;
         else
             sr.flipX = lastMoveDir.x > 0f;
     }

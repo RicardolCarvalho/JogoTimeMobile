@@ -158,6 +158,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   speed: 4
   animator: {fileID: 5825686011325372282}
+  btnUp: {fileID: 0}
+  btnDown: {fileID: 0}
+  btnLeft: {fileID: 0}
+  btnRight: {fileID: 0}
 --- !u!114 &8709156448332052136
 MonoBehaviour:
   m_ObjectHideFlags: 0
