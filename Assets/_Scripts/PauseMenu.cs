@@ -4,17 +4,23 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     private bool isPauseSceneLoaded = false;
-    private int pauseSceneIndex = 9;
+    [SerializeField] private int pauseSceneIndex = 9;
 
     void Update()
     {
+        // ESC no teclado (PC / WebGL)
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (!isPauseSceneLoaded)
-                LoadPauseScene();
-            else
-                UnloadPauseScene();
+            TogglePause();
         }
+    }
+
+    public void TogglePause()
+    {
+        if (!isPauseSceneLoaded)
+            LoadPauseScene();
+        else
+            UnloadPauseScene();
     }
 
     void LoadPauseScene()
