@@ -86,4 +86,23 @@ public class EndChoiceController : MonoBehaviour
 
         SceneManager.LoadScene(sceneIndex);
     }
+
+    // =========================================================
+    // MÉTODOS PÚBLICOS PARA OS BOTÕES DE TELA (MOBILE)
+    // =========================================================
+
+    public void OnLeftChoiceButton()
+    {
+        Move(-1);
+    }
+
+    public void OnRightChoiceButton()
+    {
+        Move(+1);
+    }
+
+    public void OnConfirmChoiceButton()
+    {
+        SelectCurrent();
+    }
 }
