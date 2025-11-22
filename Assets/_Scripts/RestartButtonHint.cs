@@ -24,7 +24,7 @@ public class RestartButtonHint : MonoBehaviour
     [SerializeField] private string keyboardText = "Pressione E para reiniciar";
     [SerializeField] private string xboxText     = "Pressione A para reiniciar";
     [SerializeField] private string psText       = "Pressione X para reiniciar";
-    [SerializeField] private string genericPadText = "Pressione A para reiniciar";
+    [SerializeField] private string genericPadText = "Pressione E para reiniciar";
 
     [Header("Blink Animation")]
     [SerializeField] private float blinkSpeed = 1.5f;   // quanto maior, mais rápido pisca
@@ -79,6 +79,11 @@ public class RestartButtonHint : MonoBehaviour
             menu.Menu();
         else
             Debug.LogWarning("[StartButtonHint] MenuActions não atribuído.");
+    }
+
+    public void OnMobileRestartButton()
+    {
+        TryRestartGame();
     }
 
     private InputMode GuessInitialMode()
