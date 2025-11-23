@@ -11,6 +11,12 @@ public class PanLidMove : MonoBehaviour
     public float rotateSpeed = 120f;
     public float maxAngle = 45f;  // limite de inclinação para cada lado
 
+    [Header("Botões Mobile (Opcional)")]
+    public HoldButton btnUp;
+    public HoldButton btnDown;
+    public HoldButton btnLeft;
+    public HoldButton btnRight;
+
     private float currentAngle;
 
     void Update()
@@ -22,6 +28,11 @@ public class PanLidMove : MonoBehaviour
     private void MoverVertical()
     {
         float inputY = Input.GetAxisRaw("Vertical"); // W S setas
+        
+        // Botões mobile
+        if (btnUp && btnUp.isPressed) inputY = 1;
+        if (btnDown && btnDown.isPressed) inputY = -1;
+        
         float delta = inputY * moveSpeed * Time.deltaTime;
 
         Vector3 pos = transform.position;
@@ -32,6 +43,11 @@ public class PanLidMove : MonoBehaviour
     private void Inclinar()
     {
         float inputX = Input.GetAxisRaw("Horizontal"); // A D setas
+        
+        // Botões mobile
+        if (btnLeft && btnLeft.isPressed) inputX = -1;
+        if (btnRight && btnRight.isPressed) inputX = 1;
+        
         if (Mathf.Abs(inputX) > 0.01f)
         {
             currentAngle += -inputX * rotateSpeed * Time.deltaTime;

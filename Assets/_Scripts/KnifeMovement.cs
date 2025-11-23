@@ -9,6 +9,12 @@ public class KnifeMovement : MonoBehaviour
     public bool constrainToScreen = true;
     public float padding = 0.05f;
 
+    [Header("Botões Mobile (Opcional)")]
+    public HoldButton btnUp;
+    public HoldButton btnDown;
+    public HoldButton btnLeft;
+    public HoldButton btnRight;
+
     private Camera cam;
     private float halfW;
     private float halfH;
@@ -36,6 +42,12 @@ public class KnifeMovement : MonoBehaviour
         // WASD e setas compartilham os eixos Horizontal e Vertical
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
+
+        // Botões mobile
+        if (btnLeft && btnLeft.isPressed) moveX = -1;
+        if (btnRight && btnRight.isPressed) moveX = 1;
+        if (btnUp && btnUp.isPressed) moveY = 1;
+        if (btnDown && btnDown.isPressed) moveY = -1;
 
         Vector2 movement = new Vector2(moveX, moveY).normalized;
 

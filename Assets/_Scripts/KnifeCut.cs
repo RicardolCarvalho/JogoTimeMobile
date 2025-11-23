@@ -10,6 +10,9 @@ public class KnifeCut : MonoBehaviour
     public Color cuttingColor = Color.yellow;
     public float scaleBoost = 1.15f;
 
+    [Header("Botão Mobile (Opcional)")]
+    public TapButton btnCut;
+
     private bool isCutting;
     private bool consumedHitThisWindow;   // evita múltiplos acertos na mesma janela
     private float cutTimer;
@@ -32,7 +35,13 @@ public class KnifeCut : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(cutKey))
+        bool cutPressed = Input.GetKeyDown(cutKey);
+        
+        // Botão mobile (apenas no momento do toque)
+        if (btnCut && btnCut.wasTappedThisFrame)
+            cutPressed = true;
+
+        if (cutPressed)
         {
             StartCut();
         }
