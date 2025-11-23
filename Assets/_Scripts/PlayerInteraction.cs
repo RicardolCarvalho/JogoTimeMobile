@@ -13,6 +13,10 @@ public class PlayerInteraction : MonoBehaviour
     [Range(0.5f, 5f)]
     public float distanciaDeteccao = 2f;
 
+    [Header("Botão Mobile (Opcional)")]
+    [Tooltip("Arraste o botão E do Canvas aqui para suporte mobile")]
+    public EButton btnInteract;
+
     private GameObject goMaisProximo;
 
     // NOVO: conjunto dos que estão DENTRO da área de detecção (trigger do Player)
@@ -25,6 +29,10 @@ public class PlayerInteraction : MonoBehaviour
         bool interactPressed = Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame;
         if (Gamepad.current != null)
             interactPressed |= Gamepad.current.buttonNorth.wasPressedThisFrame;
+        
+        // Suporte para botão mobile
+        if (btnInteract != null && btnInteract.isPressed)
+            interactPressed = true;
 
         if (interactPressed && goMaisProximo != null)
         {
